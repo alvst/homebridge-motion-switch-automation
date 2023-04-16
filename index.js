@@ -20,7 +20,7 @@ function MotionSwitchAccessory(log, config) {
   this.setTemp = config['setTemp'];
   this.setPowerState = config['setPowerState'];
   this.uniqueID = config['uniqueID'] || false;
-  this.degreeUnits = config.thermostat_details['degreeUnits'] || 1;
+  this.degreeUnits = config['degreeUnits'] || 1;
 
   this.switchState = false;
   this.motionSensorState = false;
