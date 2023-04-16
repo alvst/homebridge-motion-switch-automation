@@ -1,7 +1,11 @@
 {
   "name": "homebridge-motion-switch-automation",
   "version": "0.0.1",
-  "description": "Motion Switch plugin for homebridge: https://github.com/nfarina/homebridge",
+  "description": "Homebridge plugin for a automating thermostat",
+  "main": "index.js",
+  "dependencies": {
+    "request": ">=2.88.0"
+  },
   "license": "ISC",
   "keywords": [
     "homebridge-plugin"
