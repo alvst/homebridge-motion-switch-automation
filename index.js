@@ -106,7 +106,7 @@ MotionSwitchAccessory.prototype = {
     new Promise((resolve, reject) => {
       request(
         {
-          url: `http://localhost:${this.homebridgeCustomPort}/api/accessories/${device}`,
+          url: `http://localhost:${this.homebridgeCustomPort}/api/accessories/${this.uniqueID}`,
           method: 'PUT',
           headers: {
             accept: '*/*',
