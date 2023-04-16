@@ -74,8 +74,8 @@ MotionSwitchAccessory.prototype = {
       setTimeout(this.resetSensors, 1000, this);
     }
 
-    this.sendCurl('TargetHeatingCoolingState', 3);
-    this.sendCurl('TargetTemperature', 25);
+    this.sendCurl('TargetHeatingCoolingState', this.setPowerState);
+    this.sendCurl('TargetTemperature', this.setTemp);
   },
 
   resetSensors: function (self) {
