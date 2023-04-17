@@ -21,7 +21,9 @@ function MotionSwitchAccessory(log, config) {
   this.homebridgeCustomPort = config['homebridgeCustomPort'] || 8581;
   this.setTemp = config['setTemp'];
   this.setPowerState = config['setPowerState'];
-  this.uniqueID = config['uniqueID'] || false;
+  this.thermostatUniqueID = config['thermostatUniqueID'];
+  this.tempSensorUniqueID = config['tempSensorUniqueID'];
+  this.greater = config['greater'];
   this.degreeUnits = config['degreeUnits'] || 1;
 
   this.switchState = false;
@@ -74,8 +76,17 @@ MotionSwitchAccessory.prototype = {
       setTimeout(this.resetSensors, 1000, this);
     }
 
-    this.sendCurl('TargetHeatingCoolingState', this.setPowerState);
-    this.sendCurl('TargetTemperature', this.setTemp);
+    let currentTemp = this.getCurrentTemp();
+
+    if (this.greater) {
+      if (currentTemp > this.setTemp) {
+        this.sendCurl('TargetHeatingCoolingState', this.setPowerState);
+        this.sendCurl('TargetTemperature', this.setTemp);
+      }
+    } else {
+      this.sendCurl('TargetHeatingCoolingState', this.setPowerState);
+      this.sendCurl('TargetTemperature', this.setTemp);
+    }
   },
 
   resetSensors: function (self) {
@@ -90,6 +101,48 @@ MotionSwitchAccessory.prototype = {
       Characteristic.MotionDetected,
       Boolean(self.motionSensorState)
     );
+  },
+
+  getCurrentTemp: async function () {
+    new Promise((resolve, reject) => {
+      request(
+        {
+          url: `http://localhost:${this.homebridgeCustomPort}/api/accessories/${this.tempSensorUniqueID}`,
+          method: 'GET',
+          headers: {
+            accept: '*/*',
+            Authorization: `Bearer ${this.bearerToken}`,
+            'Content-Type': 'application/json',
+          },
+          json: {
+            characteristicType: characteristic,
+            value: value,
+          },
+        },
+        (error, response, body) => {
+          if (error) {
+            this.log.warn(error);
+            reject(error);
+          } else {
+            this.log.debug(body);
+            resolve(response);
+          }
+        }
+      );
+    }).then((resolve) => {
+      if (!resolve.body.uniqueId) {
+        let responseCode = resolve.body.statusCode;
+        if (responseCode === 200) {
+          return resolve.body.CurrentTemperature.value;
+        }
+        if (responseCode === 401) {
+          this.log.error(
+            `Failed to send cURL command. Your Bearer Token is either incorrect or has expired. Once you have updated your Bearer Token, please restart Homebridge.`
+          );
+        } else if (responseCode === 400) {
+        }
+      }
+    });
   },
 
   sendCurl: async function (characteristic, value) {
