@@ -78,16 +78,17 @@ MotionSwitchAccessory.prototype = {
     }
 
     let currentTemp = this.getCurrentTemp();
+    this.log.debug(currentTemp);
 
-    if (this.greater) {
-      if (currentTemp > this.setTemp) {
-        this.sendCurl('TargetHeatingCoolingState', this.setPowerState);
-        this.sendCurl('TargetTemperature', this.setTemp);
-      }
-    } else {
-      this.sendCurl('TargetHeatingCoolingState', this.setPowerState);
-      this.sendCurl('TargetTemperature', this.setTemp);
-    }
+    // if (this.greater) {
+    //   if (currentTemp > this.setTemp) {
+    //     this.sendCurl('TargetHeatingCoolingState', this.setPowerState);
+    //     this.sendCurl('TargetTemperature', this.setTemp);
+    //   }
+    // } else {
+    //   this.sendCurl('TargetHeatingCoolingState', this.setPowerState);
+    //   this.sendCurl('TargetTemperature', this.setTemp);
+    // }
   },
 
   resetSensors: function (self) {
@@ -127,6 +128,7 @@ MotionSwitchAccessory.prototype = {
         }
       );
     }).then((resolve) => {
+      console.log(resolve.values);
       if (resolve.values.CurrentTemperature) {
         return resolve.values.CurrentTemperature;
       } else {
@@ -147,7 +149,7 @@ MotionSwitchAccessory.prototype = {
     }
 
     this.log(
-      `Sending cURL command to ${characteristic} with temperature ${temp}`
+      `Sending cURL command to thermostat. Turning Power state to ${characteristic} and temperature to ${temp}`
     );
     new Promise((resolve, reject) => {
       request(
