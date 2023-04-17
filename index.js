@@ -128,9 +128,10 @@ MotionSwitchAccessory.prototype = {
         }
       );
     }).then((resolve) => {
-      console.log(resolve.values);
-      if (resolve.values.CurrentTemperature) {
-        return resolve.values.CurrentTemperature;
+      console.log(resolve);
+      console.log(resolve.body.values);
+      if (resolve.body.values.CurrentTemperature) {
+        return resolve.body.values.CurrentTemperature;
       } else {
         this.log.error(
           `Failed to get current temperature. Your uniqueID for your temperature sensor is probably incorrect. Please check your Homebridge logs for more information.`
