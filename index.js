@@ -120,9 +120,11 @@ MotionSwitchAccessory.prototype = {
         (error, response, body) => {
           if (error) {
             this.log.warn(error);
+            console.log('error');
             reject(error);
           } else {
             this.log.debug(body);
+            console.log('here');
             resolve(response);
           }
         }
