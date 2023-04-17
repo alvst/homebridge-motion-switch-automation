@@ -127,22 +127,13 @@ MotionSwitchAccessory.prototype = {
         }
       );
     }).then((resolve) => {
-      if (!resolve.body.uniqueId) {
-        let responseCode = resolve.body.statusCode;
-        if (responseCode === 200) {
-          return resolve.body.CurrentTemperature.value;
-        }
-        if (responseCode === 401) {
-          this.log.error(
-            `Failed to send cURL command. Your Bearer Token is either incorrect or has expired. Once you have updated your Bearer Token, please restart Homebridge.`
-          );
-        } else if (responseCode === 400) {
-        } else {
-          this.log.error(
-            `Failed to send cURL command. Please check your Homebridge logs for more information.`
-          );
-          console.log(resolve.body);
-        }
+      if (resolve.values.CurrentTemperature) {
+        return resolve.values.CurrentTemperature;
+      } else {
+        this.log.error(
+          `Failed to get current temperature. Your uniqueID for your temperature sensor is probably incorrect. Please check your Homebridge logs for more information.`
+        );
+        console.log(resolve.body);
       }
     });
   },
@@ -185,7 +176,7 @@ MotionSwitchAccessory.prototype = {
       );
     }).then((resolve) => {
       if (!resolve.body.uniqueId) {
-        let responseCode = resolve.body.statusCode;
+        let responseCode = resolve.body;
         if (responseCode === 401) {
           this.log.error(
             `Failed to send cURL command. Your Bearer Token is either incorrect or has expired. Once you have updated your Bearer Token, please restart Homebridge.`
