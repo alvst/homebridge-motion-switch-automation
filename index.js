@@ -128,8 +128,9 @@ MotionSwitchAccessory.prototype = {
         }
       );
     }).then((resolve) => {
-      console.log(resolve);
-      console.log(resolve.body.values);
+      // console.log(resolve);
+      console.log(resolve.body);
+      console.log(resolve.body.statusCode);
       if (resolve.body.values.CurrentTemperature) {
         return resolve.body.values.CurrentTemperature;
       } else {
