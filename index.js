@@ -20,6 +20,7 @@ function MotionSwitchAccessory(log, config) {
   this.bearerToken = config['bearerToken'];
   this.homebridgeCustomPort = config['homebridgeCustomPort'] || 8581;
   this.setTemp = config['setTemp'];
+  // this.targetTemp = config['targetTemp'] || this.setTemp;
   this.setPowerState = config['setPowerState'];
   this.thermostatUniqueID = config['thermostatUniqueID'];
   this.tempSensorUniqueID = config['tempSensorUniqueID'];
@@ -103,7 +104,7 @@ MotionSwitchAccessory.prototype = {
     );
   },
 
-  getCurrentTemp: async function () {
+  getCurrentTemp: async function (characteristic, value) {
     new Promise((resolve, reject) => {
       request(
         {
@@ -113,10 +114,6 @@ MotionSwitchAccessory.prototype = {
             accept: '*/*',
             Authorization: `Bearer ${this.bearerToken}`,
             'Content-Type': 'application/json',
-          },
-          json: {
-            characteristicType: characteristic,
-            value: value,
           },
         },
         (error, response, body) => {
