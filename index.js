@@ -77,7 +77,7 @@ MotionSwitchAccessory.prototype = {
       setTimeout(this.resetSensors, 1000, this);
     }
 
-    let currentTemp = this.getCurrentTemp();
+    let currentTemp = this.xr();
     this.debugLog(currentTemp);
 
     // if (this.greater) {
@@ -131,9 +131,9 @@ MotionSwitchAccessory.prototype = {
       );
     }).then((resolve) => {
       // console.log(resolve);
-      console.log(resolve.body);
-      console.log(resolve.body.statusCode);
-      console.log(resolve.body.values);
+      console.log('resolve.body' + resolve.body);
+      console.log('resolve.body.statusCode' + resolve.body.statusCode);
+      console.log('resolve.body.values' + resolve.body.values);
       if (resolve.body.values.CurrentTemperature) {
         console.log(resolve.body.values.CurrentTemperature);
         return resolve.body.values.CurrentTemperature;
