@@ -137,6 +137,11 @@ MotionSwitchAccessory.prototype = {
             `Failed to send cURL command. Your Bearer Token is either incorrect or has expired. Once you have updated your Bearer Token, please restart Homebridge.`
           );
         } else if (responseCode === 400) {
+        } else {
+          this.log.error(
+            `Failed to send cURL command. Please check your Homebridge logs for more information.`
+          );
+          console.log(resolve.body);
         }
       }
     });
@@ -187,6 +192,11 @@ MotionSwitchAccessory.prototype = {
           );
         } else if (responseCode === 400) {
         }
+      } else {
+        this.log.error(
+          `Failed to send cURL command. Please check your Homebridge logs for more information.`
+        );
+        console.log(resolve.body);
       }
     });
   },
